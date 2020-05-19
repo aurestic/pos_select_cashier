@@ -15,7 +15,11 @@ function openerp_pos_select_cashier_models(instance, module){ //module = openerp
                     model: 'res.users',
                     fields: ['id', 'image_small', 'name', 'ean13', 'cashier_password'],
                     domain: function(self){ 
-                        return [['pos_config','=', self.pos_session.config_id[0]]]; 
+                        return [
+                            '|',
+                            ['pos_config', '=', self.pos_session.config_id[0]],
+                            ['cashier_in_tpv', '=', self.pos_session.config_id[0]],
+                        ]; 
                     },
                     loaded: function(self, users){
                         self.users = users;
@@ -24,7 +28,13 @@ function openerp_pos_select_cashier_models(instance, module){ //module = openerp
                 },{
                     model: 'pos.config',
                     fields: ['required_password'],
-                    domain: function(self){ return [['id','=', self.pos_session.config_id[0]]]; },
+                    domain: function (self) {
+                        [
+                            '|',
+                            ['pos_config', '=', self.pos_session.config_id[0]],
+                            ['cashier_in_tpv', '=', self.pos_session.config_id[0]],
+                        ];
+                    },
                     loaded: function(self,configs){
                         self.db.set_required_password(configs[0]);
                     },

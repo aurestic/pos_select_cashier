@@ -17,14 +17,16 @@
 #
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#    
+#
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from openerp import fields, models
 
 
 class res_users(models.Model):
     _inherit = 'res.users'
-    
+
     cashier_password = fields.Char(string="Cashier Password", default="000000")
+    cashier_in_tpv = fields.Many2many(
+        comodel_name='pos.config', string='Cashier in POS')
